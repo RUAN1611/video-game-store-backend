@@ -28,7 +28,31 @@ exports.addCategory = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(201).json({
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
+
+exports.removeCategory = async (req, res) => {
+  try {
+    const _id = await req.params._id;
+    const category = await Category.findByIdAndDelete(_id);
+
+    if (!category) {
+      res.status(404).json({
+        status: "fail",
+        message: "Category not found",
+      });
+    } else {
+      res.status(201).json({
+        status: "success",
+        message: "Category has been removed!",
+      });
+    }
+  } catch (err) {
+    res.status(400).json({
       status: "fail",
       message: err.message,
     });
